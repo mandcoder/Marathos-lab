@@ -5,34 +5,20 @@ from pyspark.sql.functions import (
     col
 )
 
-from pyspark.sql.types import (
-    StructType,
-    StructField,
-    StringType
+BASE_DIR = "/Volumes/marathos/default/raw/TWO_CENTURIES_OF_UM_RACES.csv"
+
+bronze_schema = (
+    spark.read.format ("csv")
+    .options(header=True, inferSchema=True)
+    .load(BASE_DIR).schema
 )
-
-# Define raw Bronze schema
-# All columns are stored as strings due to messy data discovered during EDA
-bronze_schema = StructType([
-    StructField("year_of_event", StringType(), True),
-    StructField("event_dates", StringType(), True),
-    StructField("event_name", StringType(), True),
-    StructField("event_distance_length", StringType(), True),
-    StructField("event_number_of_finishers", StringType(), True),
-    StructField("athlete_performance", StringType(), True),
-    StructField("athlete_club", StringType(), True),
-    StructField("athlete_country", StringType(), True),
-    StructField("athlete_year_of_birth", StringType(), True),
-    StructField("athlete_gender", StringType(), True),
-    StructField("athlete_age_category", StringType(), True),
-    StructField("athlete_average_speed", StringType(), True),
-    StructField("athlete_id", StringType(), True),
-])
-
 
 @dp.table(
     name="bronze_events",
-    comment="Raw ultra marathon event data loaded from CSV file"
+    comment="Raw ultra marathon event data loaded from CSV file",
+    table_properties={
+        "delta.columnMapping.mode": "name"
+    }
 )
 def bronze_events():
 

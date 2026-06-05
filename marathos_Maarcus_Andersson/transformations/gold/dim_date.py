@@ -1,4 +1,4 @@
-# I used Claude for some part of this file.
+# I used Claude for some parts of this file.
 
 from pyspark import pipelines as dp
 from pyspark.sql.functions import (
@@ -15,11 +15,14 @@ from utils.table_config import DEFAULT_TABLE_PROPERTIES
 )
 
 def dim_date():
-        
-    # Create date-range 1900-01-01 to 2030-12-31 and extract attributes from "date"
+    """
+    Create a date dimension table covering 1900-01-01 to 2030-12-31.
+    Generates one row per day with date attributes for time-based analysis.
+    """
+    
     df = (spark.range(0, 47847)
     .withColumn(
-        "date", # name for the new column
+        "date",
         date_add(to_date(lit("1900-01-01")), col("id").cast("int")))
     .withColumn("year", year(col("date")))
     .withColumn("month",month(col("date")))

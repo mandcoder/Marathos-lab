@@ -18,7 +18,6 @@ from utils.silver_transformations import (
     create_event_id
 )
 
-# Create Silver table from Bronze layer
 @dp.table(
     name="marathos.silver.marathon_results",
     comment="Cleaned ultra marathon event data from bronze layer",

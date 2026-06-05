@@ -10,13 +10,14 @@ from utils.table_config import DEFAULT_TABLE_PROPERTIES
     table_properties=DEFAULT_TABLE_PROPERTIES
 )
 def dim_event():
+    """
+    Read cleaned Silver OBT
+    Select event-related columns
+    Remove duplicates
+    """
 
-    # Read cleaned Silver OBT
     df = dp.read("marathos.silver.marathon_results")
 
-    # Select event-related columns only
-    # WHY: dimension table should only contain descriptive attributes
-    # not measurable values (those belong in fct_results)
     df = df.select(
         col("event_id"),
         col("event_unit_type"),
@@ -30,9 +31,6 @@ def dim_event():
         col("host_country_code")
     )
 
-    # Remove duplicate event rows
-    # WHY: same event appears multiple times in silver since
-    # one row per athlete result exists, not one row per event
     df = df.dropDuplicates(["event_id"])
 
     return df

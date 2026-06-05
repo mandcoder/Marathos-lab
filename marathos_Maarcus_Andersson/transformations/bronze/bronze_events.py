@@ -16,21 +16,15 @@ BASE_DIR = "/Volumes/marathos/default/raw/events"
 
 def raw_ultra_marathons():
   
-    # Read raw CSV files incrementally using Auto Loader.
-    # WHY:
-    # - readStream makes this a streaming ingestion.
-    # - cloudFiles lets Databricks detect and process new files automatically.
+    # Read raw CSV file incrementally using Auto Loader.
     df = (
     spark.readStream
-    .format("cloudFiles")                 # Use Auto Loader for incremental ingestion
-    .option("cloudFiles.format", "csv")   # Filformat som Auto Loader ska leta efter
-    .option("header", "true")             # Första raden i CSV är kolumnnamn
+    .format("cloudFiles")
+    .option("cloudFiles.format", "csv")  
+    .option("header", "true")            
     .option("cloudFiles.schemaLocation", "/Volumes/marathos/default/raw/events/schema")
     .option("cloudFiles.schemaEvolutionMode", "addNewColumns")
-    # Lägger till nya kolumner när nya filer har ett annat schema
-    # WHY: hanterar filer med olika kolumnnamn i samma mapp
-    # utan detta kraschar pipelinen eller sätter null för okända kolumner
-    .load(BASE_DIR)                       # Mapp att läsa CSV-filer från
+    .load(BASE_DIR)                       
 )
 
     # Ingestion metadata columns.

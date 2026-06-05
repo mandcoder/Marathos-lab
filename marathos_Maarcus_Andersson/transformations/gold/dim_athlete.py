@@ -11,11 +11,16 @@ from utils.table_config import DEFAULT_TABLE_PROPERTIES
 )
 
 def dim_athlete():
+    """
+    Read cleaned Silver OBT
+    Select athlete-related columns
+    Remove duplicated athlete rows
+    Output: a table that contain one row per athlete_id
+    """
 
-    # Read cleaned Silver OBT
+    
     df = dp.read("marathos.silver.marathon_results")
 
-    # Select athlete-related columns
     df = df.select(
         col("athlete_id"),
         col("athlete_year_of_birth"),
@@ -24,8 +29,6 @@ def dim_athlete():
         col("athlete_age_category")
     )
 
-    # Remove duplicate athlete rows
-    # Dimension table should contain one row per athlete_id
     df = df.dropDuplicates(["athlete_id"])
 
     return df

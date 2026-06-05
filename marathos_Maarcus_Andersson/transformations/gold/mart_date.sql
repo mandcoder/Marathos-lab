@@ -7,7 +7,8 @@ SELECT DISTINCT
     
     e.event_name,
     e.host_country_code,
-    e.event_start_date,    
+    e.event_start_date,
+    e.event_end_date,   
     d.year,
     d.quarter,
     d.month,

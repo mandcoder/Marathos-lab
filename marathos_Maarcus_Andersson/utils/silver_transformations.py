@@ -62,7 +62,7 @@ def extract_event_distances(df: DataFrame) -> DataFrame:
         regexp_extract(col("event_distance"), r"(\d+\.?\d*)", 1).cast("float")
     )
 
-    # Convert distance to km for standardization
+   
     df = df.withColumn(
         "event_distance_km",
         when(col("event_unit_type") == 'mi', col("event_distance_value") * 1.60934)
@@ -159,7 +159,6 @@ def standardize_countries(df: DataFrame) -> DataFrame:
 
     df = df.withColumn("athlete_country_code", upper(trim(col("athlete_country_code"))))
 
-    # Remove invalid or unknown country codes
     df = df.filter(
         col("athlete_country_code").isNotNull()
         & (col("athlete_country_code") != "XXX")
